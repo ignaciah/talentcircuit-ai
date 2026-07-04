@@ -1,6 +1,6 @@
 # =========================================================
-# TalentCircuit — Full-Stack Gitignore (Next.js + Node.js)
-# Safe for GitHub, Cloudflare, Vercel, Render, Railway, etc.
+# TalentCircuit — QwenCloud Hackathon Gitignore
+# Full-stack: Node.js backend + Next.js frontend
 # =========================================================
 
 # -------------------------
@@ -24,6 +24,15 @@ package-lock.json
 .env.production.local
 .env.test.local
 .env.*.local
+
+# -------------------------
+# QwenCloud Deployment
+# (Ignore local configs, keep only code)
+# -------------------------
+.qwen/
+.qwencloud/
+.qwen-deploy/
+.qwen-build/
 
 # -------------------------
 # Next.js Build Output
