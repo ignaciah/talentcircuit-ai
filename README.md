@@ -71,3 +71,12 @@ TalentCircuit automates the recruiting workflow:
    ```bash
    git clone https://github.com/your-org/talentcircuit.git
    cd talentcircuit
+   ## QwenCloud Deployment
+
+1. Add your QWEN_API_KEY and QWEN_PROJECT_ID to `.env`.
+2. Ensure `/prompts` folder exists with all agent system prompts.
+3. Ensure `qwencloud.config.json` is at project root.
+4. Deploy using QwenCloud dashboard or CLI.
+5. Backend will automatically load prompts from `/prompts`.
+
+
