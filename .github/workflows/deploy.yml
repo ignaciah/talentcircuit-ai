@@ -1,0 +1,43 @@
+name: Deploy talentcircuit-ai Production
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    # Set up environment variables globally for the runner steps
+    env:
+      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      QWEN_WORKSPACE_ID: ${{ secrets.QWEN_WORKSPACE_ID }}
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-node-version: '3.11'
+        cache: 'pip' # Speeds up subsequent runs by caching dependencies
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run linting or security checks
+      run: |
+        # Optional: Add ruff, flake8, or pytest checks here
+        echo "Validating code structure..."
+
+    - name: Deploy to Cloud Infrastructure
+      # Replace this step with your specific host (e.g., Cloudflare Wrangler, AWS, VPS)
+      run: |
+        echo "Deploying talentcircuit-ai engine..."
+        # Example if pushing a build package:
+        # python manage.py deploy
