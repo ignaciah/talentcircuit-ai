@@ -1,0 +1,19 @@
+{
+  "project": "Talent Circuit AI",
+  "model": "qwen-max",
+  "agents": {
+    "intake": {
+      "system_prompt": "prompts/intakeAgent.md"
+    },
+    "scoring": {
+      "system_prompt": "prompts/scoringAgent.md"
+    },
+    "outreach": {
+      "system_prompt": "prompts/outreachAgent.md"
+    },
+    "supervisor": {
+      "system_prompt": "prompts/supervisorAgent.md"
+    }
+  }
+}
+
