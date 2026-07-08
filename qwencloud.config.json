@@ -1,6 +1,14 @@
 {
   "project": "Talent Circuit AI",
   "model": "qwen-max",
+  "entrypoint": "npm start",
+  "healthcheck": "/health",
+  "port": 4000,
+  "environment": {
+    "PORT": "4000",
+    "QWEN_MODEL": "qwen-max",
+    "QWEN_API_BASE": "https://api.qwencloud.com/v1"
+  },
   "agents": {
     "intake": {
       "system_prompt": "prompts/intakeAgent.md"

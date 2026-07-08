@@ -1,43 +1,3 @@
-Repository Structure (Final)
-
-`
-talentcircuit/
-  backend/
-    src/
-      index.ts
-      routes/
-        roles.ts
-        candidates.ts
-        outreach.ts
-        supervisor.ts
-      services/
-        qwenClient.ts
-        intakeAgent.ts
-        scoringAgent.ts
-        outreachAgent.ts
-        supervisorAgent.ts
-      db/
-        models.ts
-    package.json
-    tsconfig.json
-    .env.example
-
-  frontend/
-    app/
-      layout.tsx
-      page.tsx
-      role/[id]/page.tsx
-      role/[id]/candidates/page.tsx
-      role/[id]/outreach/page.tsx
-    lib/
-      api.ts
-    package.json
-    next.config.mjs
-
-  docs/
-    architecture.md
-    prompts.md
-    README.md
 # TalentCircuit — AI Autopilot for Recruiting
 Built for the Global AI Hackathon (Qwen Cloud)
 
@@ -54,29 +14,39 @@ TalentCircuit automates the recruiting workflow:
 - Clean, minimal UI for demo clarity
 
 ## Tech Stack
-- Backend: Node.js + Express
+- Backend: Node.js
 - Frontend: Next.js
 - AI: Qwen Cloud (qwen-max)
 - Storage: Local JSON or Postgres
 
-## Getting started
+## Deployment readiness
+The repository now includes:
+- a working Node entrypoint at [src/index.js](src/index.js)
+- a deployment start command in [package.json](package.json)
+- a [Procfile](Procfile) for platform deployments
+- a [Dockerfile](Dockerfile) for container deployments
+- an environment template at [.env.example](.env.example)
 
-### Prerequisites
-- Node.js (LTS)
-- Qwen Cloud account + API key
+## Run locally
+```bash
+npm start
+```
 
-### Setup
+Then visit:
+- http://127.0.0.1:4000/health
+- http://127.0.0.1:4000/
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/your-org/talentcircuit.git
-   cd talentcircuit
-   ## QwenCloud Deployment
+## Deploy to Qwen Cloud
+Set these environment variables in your deployment environment:
+- QWEN_API_KEY
+- QWEN_API_BASE
+- QWEN_MODEL
+- PORT
 
-1. Add your QWEN_API_KEY and QWEN_PROJECT_ID to `.env`.
-2. Ensure `/prompts` folder exists with all agent system prompts.
-3. Ensure `qwencloud.config.json` is at project root.
-4. Deploy using QwenCloud dashboard or CLI.
-5. Backend will automatically load prompts from `/prompts`.
+## Docker
+```bash
+docker build -t talentcircuit-ai .
+docker run -p 4000:4000 --env-file .env talentcircuit-ai
+```
 
 
