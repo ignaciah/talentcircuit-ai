@@ -1,43 +1,60 @@
-name: Deploy talentcircuit-ai Production
+name: Build & Deploy talentcircuit-ai to QwenCloud
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    # Set up environment variables globally for the runner steps
+    permissions:
+      contents: read
+      packages: write
+
     env:
-      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
-      QWEN_WORKSPACE_ID: ${{ secrets.QWEN_WORKSPACE_ID }}
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
 
     steps:
-    - name: Check out repository code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
       with:
-        python-node-version: '3.11'
-        cache: 'pip' # Speeds up subsequent runs by caching dependencies
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha
 
-    - name: Run linting or security checks
-      run: |
-        # Optional: Add ruff, flake8, or pytest checks here
-        echo "Validating code structure..."
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
 
-    - name: Deploy to Cloud Infrastructure
-      # Replace this step with your specific host (e.g., Cloudflare Wrangler, AWS, VPS)
+    - name: Deploy to QwenCloud
+      env:
+        QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+        QWEN_WORKSPACE_ID: ${{ secrets.QWEN_WORKSPACE_ID }}
       run: |
-        echo "Deploying talentcircuit-ai engine..."
-        # Example if pushing a build package:
-        # python manage.py deploy
+        echo "Deployment to QwenCloud initiated"
+        echo "Container image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+        # QwenCloud deployment command or script goes here
+        # Example: qwen-cli deploy --image $IMAGE --env QWEN_API_KEY=$QWEN_API_KEY
