@@ -26,6 +26,7 @@ The repository now includes:
 - a [Procfile](Procfile) for platform deployments
 - a [Dockerfile](Dockerfile) for container deployments
 - an environment template at [.env.example](.env.example)
+- Alibaba Cloud deployment assets in [scripts/deploy-alibaba.sh](scripts/deploy-alibaba.sh) and [.github/workflows/deploy-alibaba.yml](.github/workflows/deploy-alibaba.yml)
 
 ## Run locally
 ```bash
@@ -48,5 +49,21 @@ Set these environment variables in your deployment environment:
 docker build -t talentcircuit-ai .
 docker run -p 4000:4000 --env-file .env talentcircuit-ai
 ```
+
+## Deploy to Alibaba Cloud
+1. Copy the Alibaba environment template:
+   ```bash
+   cp .env.alibaba.example .env.alibaba
+   ```
+2. Fill in your Alibaba Cloud credentials and registry settings.
+3. Build and push the image:
+   ```bash
+   chmod +x scripts/deploy-alibaba.sh
+   ALIYUN_ACCESS_KEY_ID=... ALIYUN_ACCESS_KEY_SECRET=... ALIYUN_REGION=cn-hangzhou ./scripts/deploy-alibaba.sh
+   ```
+4. Run the container on your ECS instance or container service:
+   ```bash
+   docker run -d -p 80:4000 --name talentcircuit-ai --env-file .env.alibaba registry.cn-hangzhou.aliyuncs.com/talentcircuit/talentcircuit-ai:latest
+   ```
 
 
